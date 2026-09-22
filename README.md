@@ -14,12 +14,10 @@ To make the data pipeline efficient and production-ready, the data loading proce
 - **Process:** Fetched 1 year of historical stock data using the `yfinance` API. The data was processed, flattened, and initially saved into a CSV format before being pushed to the MySQL database.
 - **Status:** Executed once.
 
-### Phase 2: Automated Daily Incremental Load (Current)
-
-- **Objective:** To keep the dashboard updated with live market data without duplicating past records.
-- **Process:** A new Python script (`daily_stock_update.py`) runs daily. Instead of fetching years of data, it strictly fetches the **previous 1 day's data** (`period="1d"`).
-- **Transformation:** It cleans the data in memory, drops conflicting columns (like 'Dividends' and 'Stock Splits' to prevent schema mismatch), handles timezone formatting, and directly appends the fresh rows to the existing MySQL table using `SQLAlchemy`.
-- **Automation:** Designed to be scheduled via Windows Task Scheduler for zero-touch daily updates.
+### Phase 2: On-Demand Execution:
+The Python script (daily_stock_update.py) is triggered manually to fetch the latest market closing data.
+Data Transformation & Load: It cleans the data in memory, handles timezone formatting, and appends the fresh rows to the existing MySQL table using SQLAlchemy.
+Dashboard Refresh: Power BI is refreshed to instantly update the visualizations, ROI, and volatility metrics based on the newly added database rows.
 
 ## 🛠️ Tech Stack Used
 
